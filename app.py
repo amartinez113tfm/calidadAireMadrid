@@ -1,17 +1,23 @@
 import streamlit as st
-import pandas as pd
 import joblib
-import time
-import requests # Para las llamadas al API
+import urllib.request
+import os
 
-# Configuración de la página
-st.set_page_config(page_title="Predicciones vs Realidad", layout="wide")
-
-# 1. Cargar el modelo (con cache para no ralentizar)
 @st.cache_resource
 def load_model():
-    return joblib.load('modelo_rf.pkl')
+    model_path = 'modelo_rf.pkl'
+    
+    # Si el archivo no está en el servidor de Streamlit, lo bajamos del Release de GitHub
+    if not os.path.exists(model_path):
+        # SUSTITUYE ESTA URL: Haz clic derecho en el archivo en tu 'Release' y dale a 'Copiar dirección de enlace'
+        url = "https://github.com/TU_USUARIO/TU_REPO/releases/download/v1.0/modelo_rf.pkl"
+        
+        with st.spinner("Descargando modelo... un momento, por favor."):
+            urllib.request.urlretrieve(url, model_path)
+            
+    return joblib.load(model_path)
 
+# Ahora ya puedes usarlo normalmente
 model = load_model()
 
 # 2. Inicializar el historial en la sesión de Streamlit
