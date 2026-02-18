@@ -2,6 +2,7 @@ import streamlit as st
 import joblib
 import urllib.request
 import os
+import pandas as pd
 
 @st.cache_resource
 def load_model():
@@ -113,3 +114,4 @@ with placeholder.container():
 st.info("La gráfica se actualiza cada 5 segundos reflejando los cambios en los parámetros.")
 time.sleep(5)
 st.rerun()
+
